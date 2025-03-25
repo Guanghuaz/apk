@@ -1,19 +1,19 @@
 workflows:
   flutter-android:
     name: Flutter Android Build
+    instance_type: mac_mini
+    max_build_duration: 60
     environment:
-      flutter: 3.29.2     # ✅ 指定 Flutter 版本，避免频繁下载
+      flutter: 3.29.2
       vars:
-        PUB_HOSTED_URL: "https://mirrors.aliyun.com/dart-pub"
-        FLUTTER_STORAGE_BASE_URL: "https://mirrors.aliyun.com/flutter"
+        PACKAGE_NAME: "com.example.myapp"
     scripts:
-      - flutter pub get   # 获取依赖
-      - flutter analyze    # 代码静态分析
-      - flutter build apk --release  # 生成 Release APK
-    cache:
-      cache_paths:
-        - ~/.pub-cache     # ✅ 缓存 pub 依赖，减少重复下载
-        - $FLUTTER_ROOT/.pub-cache
+      - flutter pub get
+      - flutter build apk --release
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
+    publishing:
+      email:
+        recipients:
+          - zyghl12@163.com
 
