@@ -3,7 +3,7 @@ workflows:
   flutter-android:
     name: Flutter Android Build
     environment:
-      flutter: stable  # 使用 Flutter 稳定版（也可以指定版本号，如 "3.16.0"）
+      flutter: 3.29.2 
       vars:
         PACKAGE_NAME: "com.example.flutterapp"   # 替换为你的应用包名
     scripts:
