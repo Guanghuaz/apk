@@ -7,6 +7,11 @@ workflows:
         PUB_HOSTED_URL: "https://mirrors.aliyun.com/dart-pub"
         FLUTTER_STORAGE_BASE_URL: "https://mirrors.aliyun.com/flutter"
     scripts:
+      - flutter clean
+      - rm -rf ~/.pub-cache
+      - export PUB_HOSTED_URL=https://mirrors.aliyun.com/dart-pub
+      - export FLUTTER_STORAGE_BASE_URL=https://mirrors.aliyun.com/flutter
+      - for i in {1..3}; do flutter pub get && break || sleep 10; done
       - flutter pub get   # 获取依赖
       - flutter analyze    # 代码静态分析
       - flutter test       # 运行测试（可选）
