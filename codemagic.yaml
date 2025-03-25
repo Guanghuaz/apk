@@ -4,7 +4,6 @@ workflows:
     name: Flutter Android Build
     environment:
       flutter: stable  # 使用 Flutter 稳定版（也可以指定版本号，如 "3.16.0"）
-      xcode: latest     # 仅 iOS 项目需要，可忽略
       vars:
         PACKAGE_NAME: "com.example.flutterapp"   # 替换为你的应用包名
     scripts:
