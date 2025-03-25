@@ -1,1 +1,16 @@
 
+workflows:
+  flutter-android:
+    name: Flutter Android Build
+    environment:
+      flutter: stable  # 使用 Flutter 稳定版（也可以指定版本号，如 "3.16.0"）
+      xcode: latest     # 仅 iOS 项目需要，可忽略
+      vars:
+        PACKAGE_NAME: "com.example.flutterapp"   # 替换为你的应用包名
+    scripts:
+      - flutter packages get  # 获取项目依赖
+      - flutter analyze        # 代码静态分析，确保无语法错误
+      - flutter test           # 运行测试（可选）
+      - flutter build apk --release  # 生成 Release 版本 APK
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
