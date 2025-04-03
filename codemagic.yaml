@@ -1,19 +1,50 @@
+# codemagic.yaml - Configuration for building the Guanghuaz/apk project
+
 workflows:
-  flutter-android:
-    name: Flutter Android Build
+  # --- Workflow for building a DEBUG APK ---
+  # 这个流程构建一个用于测试的 Debug APK，不需要代码签名
+  android-debug:
+    name: Android Debug Build
+    instance_type: linux_x2 
+    max_build_duration: 30 
     environment:
-      flutter: 3.29.2
-      vars:
-        PACKAGE_NAME: "com.example.myapp"
+      android_sdk_version: 33 
     scripts:
       - name: Set gradlew executable permissions
-        script: chmod +x ./gradlew 
-      - name: Build debug APK
-        script: ./gradlew :app:assembleDebug 
+        script: | 
+          chmod +x ./gradlew
+      - name: Build debug APK with Gradle
+        script: |
+          ./gradlew :app:assembleDebug --stacktrace 
     artifacts:
-      - build app-release.apk
+      - app/build/outputs/apk/debug/*.apk
     publishing:
-      email:
-        recipients:
-          - zyghl12@163.com
-
+  android-release:
+    name: Android Release Build
+    instance_type: linux_x2
+    max_build_duration: 30
+    environment:
+      # 引用你在 Codemagic UI 中设置的环境变量组（如果创建了组）
+      # groups:
+      #   - keystore_credentials 
+      android_sdk_version: 33
+    android_signing:
+      keystore: $CM_KEYSTORE # 引用环境变量中的 Keystore 文件名 (需要在UI中上传并命名为CM_KEYSTORE，或者直接写死上传后的文件名)
+      keystore_password: $CM_KEYSTORE_PASSWORD # 引用 Keystore 密码环境变量
+      key_alias: $CM_KEY_ALIAS         # 引用 Key Alias 环境变量
+      key_password: $CM_KEY_PASSWORD     # 引用 Key 密码环境变量
+    scripts:
+      - name: Set gradlew executable permissions
+        script: |
+          chmod +x ./gradlew
+      - name: Build release APK with Gradle
+        script: | 
+          ./gradlew :app:assembleRelease --stacktrace
+    artifacts:
+      - app/build/outputs/apk/release/*.apk # 收集构建好的 Release APK
+      - app/build/outputs/mapping/release/mapping.txt # 收集 Proguard/R8 映射文件
+    publishing:
+      # 可选：配置发布到 Google Play 或其他地方
+      # google_play:
+      #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS # 需要在 UI 添加名为 GCLOUD_SERVICE_ACCOUNT_CREDENTIALS 的凭证文件
+      #   track: internal # e.g., internal, alpha, beta, production
