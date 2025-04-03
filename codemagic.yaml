@@ -1,7 +1,6 @@
 workflows:
   flutter-android:
     name: Flutter Android Build
-    instance_type: linux_x2
     environment:
       flutter: 3.29.2
       vars:
