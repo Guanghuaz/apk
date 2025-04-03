@@ -10,7 +10,7 @@ workflows:
       - flutter pub get
       - flutter build apk --release
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build app-release.apk
     publishing:
       email:
         recipients:
